@@ -9,7 +9,7 @@ prefix = if ENV['NATIVE_PUBLISH'] == 'true'
 Pod::Spec.new do |s|
   s.name         = 'CapacitorCordova'
   s.module_name  = 'Cordova'
-  s.version      = package['version']
+  s.version      = '5.7.5'
   s.summary      = 'Capacitor Cordova Compatibility Layer'
   s.homepage     = 'https://capacitorjs.com'
   s.license      = 'MIT'

@@ -1,14 +1,9 @@
 require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
-prefix = if ENV['NATIVE_PUBLISH'] == 'true'
-           'ios/'
-         else
-           ''
-         end
 
 Pod::Spec.new do |s|
   s.name = 'Capacitor'
-  s.version = package['version']
+  s.version = '5.7.5'
   s.summary = 'Capacitor for iOS'
   s.social_media_url = 'https://twitter.com/capacitorjs'
   s.license = 'MIT'
