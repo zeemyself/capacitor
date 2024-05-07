@@ -122,13 +122,17 @@ import Cordova
             }
         }
         if let preferredContentMode = instanceConfiguration.preferredContentMode {
-            var mode = WKWebpagePreferences.ContentMode.recommended
-            if preferredContentMode == "mobile" {
-                mode = WKWebpagePreferences.ContentMode.mobile
-            } else if preferredContentMode == "desktop" {
-                mode = WKWebpagePreferences.ContentMode.desktop
+            if #available(iOS 13.0, *) {
+                var mode = WKWebpagePreferences.ContentMode.recommended
+                if preferredContentMode == "mobile" {
+                    mode = WKWebpagePreferences.ContentMode.mobile
+                } else if preferredContentMode == "desktop" {
+                    mode = WKWebpagePreferences.ContentMode.desktop
+                }
+                webViewConfiguration.defaultWebpagePreferences.preferredContentMode = mode
+            } else {
+                // Fallback on earlier versions
             }
-            webViewConfiguration.defaultWebpagePreferences.preferredContentMode = mode
         }
         return webViewConfiguration
     }
@@ -177,7 +181,11 @@ import Cordova
             }
             if let statusBarStyle = plist["UIStatusBarStyle"] as? String {
                 if statusBarStyle == "UIStatusBarStyleDarkContent" {
-                    self.statusBarStyle = .darkContent
+                    if #available(iOS 13.0, *) {
+                        self.statusBarStyle = .darkContent
+                    } else {
+                        // Fallback on earlier versions
+                    }
                 } else if statusBarStyle != "UIStatusBarStyleDefault" {
                     self.statusBarStyle = .lightContent
                 }
@@ -297,8 +305,12 @@ extension CAPBridgeViewController {
             aWebView.scrollView.backgroundColor = backgroundColor
         } else {
             // Use the system background colors if background is not set by user
-            aWebView.backgroundColor = UIColor.systemBackground
-            aWebView.scrollView.backgroundColor = UIColor.systemBackground
+            if #available(iOS 13.0, *) {
+                aWebView.backgroundColor = UIColor.systemBackground
+                aWebView.scrollView.backgroundColor = UIColor.systemBackground
+            } else {
+                // Fallback on earlier versions
+            }
         }
         aWebView.capacitor.setKeyboardShouldRequireUserInteraction(false)
         // set our ivar

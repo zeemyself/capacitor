@@ -74,14 +74,22 @@ internal class WebViewAssetHandler: NSObject, WKURLSchemeHandler {
                     toRange = Int(streamParts[1]) ?? toRange
                 }
                 let rangeLength = toRange - fromRange + 1
-                try fileHandle.seek(toOffset: UInt64(fromRange))
+                if #available(iOS 13.0, *) {
+                    try fileHandle.seek(toOffset: UInt64(fromRange))
+                } else {
+                    // Fallback on earlier versions
+                }
                 data = fileHandle.readData(ofLength: rangeLength)
                 headers["Accept-Ranges"] = "bytes"
                 headers["Content-Range"] = "bytes \(fromRange)-\(toRange)/\(totalSize)"
                 headers["Content-Length"] = String(data.count)
                 let response = HTTPURLResponse(url: localUrl, statusCode: 206, httpVersion: nil, headerFields: headers)
                 urlSchemeTask.didReceive(response!)
-                try fileHandle.close()
+                if #available(iOS 13.0, *) {
+                    try fileHandle.close()
+                } else {
+                    // Fallback on earlier versions
+                }
             } else {
                 if !stringToLoad.contains("cordova.js") {
                     if isMediaExtension(pathExtension: url.pathExtension) {
